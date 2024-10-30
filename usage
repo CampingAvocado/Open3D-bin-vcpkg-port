@@ -1,0 +1,22 @@
+Open3D-bin provides CMake targets:
+
+find_package(Open3D REQUIRED)
+target_link_libraries(My_Project PRIVATE Open3D::Open3D)
+
+# On Windows if BUILD_SHARED_LIBS is enabled, copy .dll files to the executable directory
+if(WIN32)
+    get_target_property(open3d_type Open3D::Open3D TYPE)
+    if(open3d_type STREQUAL "SHARED_LIBRARY")
+        message(STATUS "Copying Open3D.dll to ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>")
+        add_custom_command(TARGET Draw POST_BUILD
+                           COMMAND ${CMAKE_COMMAND} -E copy
+                                   ${CMAKE_INSTALL_PREFIX}/bin/Open3D.dll
+                                   ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>)
+    endif()
+endif()
+
+source: https://github.com/isl-org/open3d-cmake-find-package/blob/master/CMakeLists.txt
+
+New in port wrapper:
+- On Linux, setting VCPKG_USE_CUDA to ON will download the cuda release (OFF by default)
+- On Linux, setting VCPKG_CXX11_ABI to OFF will download the release with the old ABI (ON by default)

@@ -1,0 +1,19 @@
+{
+    "name": "open3d-bin",
+    "version": "0.15.1",
+    "homepage": "https://github.com/isl-org/Open3D",
+    "description": "A port that wraps around prebuilt binaries as no package exists for vcpkg yet",
+    "license": "MIT",
+    "dependencies": [
+      {
+        "name" : "vcpkg-cmake",
+        "host" : true
+      },
+      {
+        "name" : "vcpkg-cmake-config",
+        "host" : true
+      },
+      "glog",
+      "tbb"
+    ]
+}
