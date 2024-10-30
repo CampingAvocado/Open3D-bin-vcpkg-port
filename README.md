@@ -2,7 +2,7 @@
 A rudimentary overlay port of the Open3D public repository that uses their pre-built releases, as a proper package doesn't exist yet.
 Only tested in Manifest mode.
 ## Usage
-1. Add this project as a submodule
+1. Add this project as a submodule: `git submodule add <path to submodule root>/open3d-bin`
 2. Add the following to `vcpkg-configuration`:
    ```json
    {
