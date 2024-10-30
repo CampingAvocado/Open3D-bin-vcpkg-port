@@ -5,10 +5,12 @@ Only tested in Manifest mode.
 1. Add this project as a submodule
 2. Add the following to `vcpkg-configuration`:
    ```json
-   "overlay-ports": [
-    "<path to submodule root>"
-  ]
-  ```
+   {
+      "overlay-ports": [
+       "<path to submodule root>"
+     ]
+   }
+   ```
 3. Add package: `vcpkg add port open3d-bin`
 
 ## Important Notes
