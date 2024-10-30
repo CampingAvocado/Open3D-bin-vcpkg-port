@@ -1,4 +1,4 @@
-# BreadcrumbsOpen3D-bin-vcpkg-port
+# Open3D-bin-vcpkg-port
 A rudimentary overlay port of the Open3D public repository that uses their pre-built releases, as a proper package doesn't exist yet.
 Only tested in Manifest mode.
 ## Usage
