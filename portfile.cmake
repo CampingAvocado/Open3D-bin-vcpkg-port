@@ -10,7 +10,7 @@ set(VCPKG_CXX11_ABI ON CACHE BOOL "Relevant if you need old ABI, e.g. to work wi
 
 # archive download managment
 set(VERSION "0.15.1")
-set(BASE_URL "https://github.com/isl-org/Open3D/releases/download/v${VERSION}/")
+set(BASE_URL "https://github.com/isl-org/Open3D/releases/download/v${VERSION}")
 
 if(VCPKG_TARGET_IS_WINDOWS)
     set(ARCHIVE_FILENAME_RELEASE "open3d-devel-windows-amd64-${VERSION}.zip")
@@ -24,7 +24,7 @@ elseif(VCPKG_TARGET_IS_LINUX)
             set(SHA512_RELEASE 0)
         else()
             set(ARCHIVE_FILENAME_RELEASE "open3d-devel-linux-x86_64-cxx11-abi-${VERSION}.tar.xz")
-            set(SHA512_RELEASE 0)
+            set(SHA512_RELEASE 1e0e4cc08fe4bf17a6edcb83added89b450df72fddc4e573eb2ba06e910efad341bc16de6b7274d93ce63dcaef5d25064fd4fe55141a727f0b862365026e6b68)
         endif()
     else()
         if(VCPKG_USE_CUDA)
