@@ -13,31 +13,38 @@ set(VERSION "0.15.1")
 set(BASE_URL "https://github.com/isl-org/Open3D/releases/download/v${VERSION}/")
 
 if(VCPKG_TARGET_IS_WINDOWS)
-    set(ARCHIVE_FILENAME "open3d-devel-windows-amd64-${VERSION}.zip")
+    set(ARCHIVE_FILENAME_RELEASE "open3d-devel-windows-amd64-${VERSION}.zip")
     set(ARCHIVE_FILENAME_DEBUG "open3d-devel-windows-amd64-${VERSION}-dbg.zip")
+    set(SHA512_RELEASE edbcaab47cc43b78b00373596f83be634df62a16e27ca464d13277dc6faa426821837585df226326408587a2558bf53cd2dfbf51698d02bb1f60b61f8b7cf854)
+    set(SHA512_DEBUG 6ac22e20c5ef1285761b99eb8bf57ab20e074336c3a9d0010e79a1254f81b065c1bb2c9b1b4ee3f5ab37015469a2e61f4b036e1fb3d4d7147b88b0575858aee5)
 elseif(VCPKG_TARGET_IS_LINUX)
     if(VCPKG_CXX11_ABI)
         if(VCPKG_USE_CUDA)
-            set(ARCHIVE_FILENAME "open3d-devel-linux-x86_64-cxx11-abi-cuda-${VERSION}.tar.xz")
+            set(ARCHIVE_FILENAME_RELEASE "open3d-devel-linux-x86_64-cxx11-abi-cuda-${VERSION}.tar.xz")
+            set(SHA512_RELEASE 0)
         else()
-            set(ARCHIVE_FILENAME "open3d-devel-linux-x86_64-cxx11-abi-${VERSION}.tar.xz")
+            set(ARCHIVE_FILENAME_RELEASE "open3d-devel-linux-x86_64-cxx11-abi-${VERSION}.tar.xz")
+            set(SHA512_RELEASE 0)
         endif()
     else()
         if(VCPKG_USE_CUDA)
-            set(ARCHIVE_FILENAME "open3d-devel-linux-x86_64-pre-cxx11-abi-cuda-${VERSION}.tar.xz")
+            set(ARCHIVE_FILENAME_RELEASE "open3d-devel-linux-x86_64-pre-cxx11-abi-cuda-${VERSION}.tar.xz")
+            set(SHA512_RELEASE 0)
         else()
-            set(ARCHIVE_FILENAME "open3d-devel-linux-x86_64-pre-cxx11-abi-${VERSION}.tar.xz")
+            set(ARCHIVE_FILENAME_RELEASE "open3d-devel-linux-x86_64-pre-cxx11-abi-${VERSION}.tar.xz")
+            set(SHA512_RELEASE 0)
         endif()
     endif()
-    set(ARCHIVE_FILENAME_DEBUG ${ARCHIVE_FILENAME}) # on linux, no debug-specific releases exist
+    set(ARCHIVE_FILENAME_DEBUG ${ARCHIVE_FILENAME_RELEASE}) # on linux, no debug-specific releases exist
+    set(SHA512_DEBUG ${SHA512_RELEASE})
 endif()
 
-set(ARCHIVE_URL "${BASE_URL}/${ARCHIVE_FILENAME}")
+set(ARCHIVE_URL_RELEASE "${BASE_URL}/${ARCHIVE_FILENAME_RELEASE}")
 vcpkg_download_distfile(
     RELEASE_ARCHIVE
-    URLS ${ARCHIVE_URL}
-    FILENAME ${ARCHIVE_FILENAME}
-    SHA512 edbcaab47cc43b78b00373596f83be634df62a16e27ca464d13277dc6faa426821837585df226326408587a2558bf53cd2dfbf51698d02bb1f60b61f8b7cf854
+    URLS ${ARCHIVE_URL_RELEASE}
+    FILENAME ${ARCHIVE_FILENAME_RELEASE}
+    SHA512 ${SHA512_RELEASE}
 )
 
 set(ARCHIVE_URL_DEBUG "${BASE_URL}/${ARCHIVE_FILENAME_DEBUG}")
@@ -45,11 +52,11 @@ vcpkg_download_distfile(
     DEBUG_ARCHIVE
     URLS ${ARCHIVE_URL_DEBUG}
     FILENAME ${ARCHIVE_FILENAME_DEBUG}
-    SHA512 6ac22e20c5ef1285761b99eb8bf57ab20e074336c3a9d0010e79a1254f81b065c1bb2c9b1b4ee3f5ab37015469a2e61f4b036e1fb3d4d7147b88b0575858aee5
+    SHA512 ${SHA512_DEBUG}
 )
 
 vcpkg_extract_source_archive(
-    src
+    src_release
     ARCHIVE ${RELEASE_ARCHIVE}
 )
 
@@ -61,21 +68,31 @@ vcpkg_extract_source_archive(
 ### installs
 
 # Release files
-file(INSTALL "${src}/include" DESTINATION "${CURRENT_PACKAGES_DIR}")
-file(INSTALL "${src}/lib" DESTINATION "${CURRENT_PACKAGES_DIR}")
-file(INSTALL "${src}/bin" DESTINATION "${CURRENT_PACKAGES_DIR}")
-file(INSTALL "${src}/CMake/" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
+file(INSTALL "${src_release}/include" DESTINATION "${CURRENT_PACKAGES_DIR}")
+file(INSTALL "${src_release}/lib" DESTINATION "${CURRENT_PACKAGES_DIR}")
+if(VCPKG_TARGET_IS_WINDOWS)
+    file(INSTALL "${src_release}/bin" DESTINATION "${CURRENT_PACKAGES_DIR}")
+    file(INSTALL "${src_release}/CMake/" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
+else()
+    file(INSTALL "${src_release}/lib/cmake/Open3D" DESTINATION "${CURRENT_PACKAGES_DIR}/share" RENAME "${PORT}")
+endif()
 
 # Debug files (SAME AS RELEASE ON LINUX because Open3D provides no debug build there) 
 file(INSTALL "${src_debug}/lib" DESTINATION "${CURRENT_PACKAGES_DIR}/debug")
 file(INSTALL "${src_debug}/bin" DESTINATION "${CURRENT_PACKAGES_DIR}/debug")
-file(INSTALL "${src_debug}/CMake" DESTINATION "${CURRENT_PACKAGES_DIR}/debug/share/${PORT}")
+if(VCPKG_TARGET_IS_WINDOWS)
+    file(INSTALL "${src_debug}/bin" DESTINATION "${CURRENT_PACKAGES_DIR}")
+    file(INSTALL "${src_debug}/CMake/" DESTINATION "${CURRENT_PACKAGES_DIR}/debug/share/${PORT}")
+else()
+    file(INSTALL "${src_debug}/lib/cmake/Open3D" DESTINATION "${CURRENT_PACKAGES_DIR}/debug/share" RENAME "${PORT}")
+endif()
 
 # usage file
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
+file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/debug/share/${PORT}")
 
 # figure out cmake targets
-vcpkg_fixup_cmake_targets(CONFIG_PATH "share/${PORT}")
+vcpkg_fixup_cmake_targets()
 
 # install license from repo
 set(LICENSE_URL "https://raw.githubusercontent.com/isl-org/Open3D/refs/tags/v${VERSION}/LICENSE")
