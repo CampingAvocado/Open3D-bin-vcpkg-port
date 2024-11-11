@@ -4,6 +4,24 @@ if(NOT (VCPKG_TARGET_ARCHITECTURE STREQUAL "x64" OR VCPKG_TARGET_ARCHITECTURE ST
 endif()
 set(VCPKG_POLICY_ALLOW_EMPTY_FOLDERS enabled)
 
+
+# Check if libc++.so.1 exists on system
+if(VCPKG_TARGET_IS_LINUX)
+    find_library(LIBCXX_LIB NAMES libc++.so.1 PATHS /usr/lib /usr/local/lib)
+    if(NOT LIBCXX_LIB)
+        message(FATAL_ERROR "
+        *******************************************************
+        * libc++.so.1 not found.                              *
+        * You can install it on Ubuntu via:                   *
+        *                                                     *
+        *     sudo apt install libc++-dev                     *
+        *******************************************************
+        ")
+    else()
+        message(STATUS "libc++.so.1 found at ${LIBCXX_LIB}")
+    endif()
+endif()
+
 # custom bools ONLY RELEVANT FOR LINUX
 set(VCPKG_USE_CUDA OFF CACHE BOOL "Use CUDA")
 set(VCPKG_CXX11_ABI ON CACHE BOOL "Relevant if you need old ABI, e.g. to work with PyTorch / TensorFlow libraries.")
