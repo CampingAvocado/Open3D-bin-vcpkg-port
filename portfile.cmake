@@ -5,17 +5,18 @@ endif()
 set(VCPKG_POLICY_ALLOW_EMPTY_FOLDERS enabled)
 
 # These featuresare ONLY RELEVANT FOR LINUX
-vcpkg_check_features(OUT_FEATURE_OPTIONS
-    cuda
-    cxx11-abi
+vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+    FEATURES
+        cuda
+        cxx11-abi
 )
-if("cuda" IN_LIST OUT_FEATURE_OPTIONS)
+if("cuda" IN_LIST FEATURE_OPTIONS)
     set(USE_CUDA ON)
 else()
     set(USE_CUDA OFF)
 endif()
 
-if("cxx11-abi" IN_LIST OUT_FEATURE_OPTIONS)
+if("cxx11-abi" IN_LIST FEATURE_OPTIONS)
     set(USE_CXX11_ABI ON)
 else()
     set(USE_CXX11_ABI OFF)
