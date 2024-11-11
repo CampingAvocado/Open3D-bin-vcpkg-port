@@ -107,7 +107,7 @@ endif()
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
 
 # figure out cmake targets
-vcpkg_fixup_cmake_targets()
+vcpkg_fixup_cmake_targets(CONFIG_PATH "${CURRENT_PACKAGES_DIR}/share/${PORT}")
 
 # install license from repo
 set(LICENSE_URL "https://raw.githubusercontent.com/isl-org/Open3D/refs/tags/v${VERSION}/LICENSE")
