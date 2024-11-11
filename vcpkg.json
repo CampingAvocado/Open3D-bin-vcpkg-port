@@ -15,5 +15,16 @@
       },
       "glog",
       "tbb"
-    ]
+    ],
+    "default-features": [ "cxx11-abi" ],
+    "features": {
+        "cuda": {
+            "description": "Enable CUDA support",
+            "dependencies": []
+        },
+        "cxx11-abi": {
+            "description": "Use C++11 ABI: Relevant if you need old ABI, e.g. to work with PyTorch / TensorFlow libraries.",
+            "dependencies": []
+        }
+    }
 }

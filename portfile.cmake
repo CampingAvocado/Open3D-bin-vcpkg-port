@@ -4,6 +4,23 @@ if(NOT (VCPKG_TARGET_ARCHITECTURE STREQUAL "x64" OR VCPKG_TARGET_ARCHITECTURE ST
 endif()
 set(VCPKG_POLICY_ALLOW_EMPTY_FOLDERS enabled)
 
+# These featuresare ONLY RELEVANT FOR LINUX
+vcpkg_check_features(OUT_FEATURE_OPTIONS
+    cuda
+    cxx11-abi
+)
+if("cuda" IN_LIST OUT_FEATURE_OPTIONS)
+    set(USE_CUDA ON)
+else()
+    set(USE_CUDA OFF)
+endif()
+
+if("cxx11-abi" IN_LIST OUT_FEATURE_OPTIONS)
+    set(USE_CXX11_ABI ON)
+else()
+    set(USE_CXX11_ABI OFF)
+endif()
+
 # Check if libc++.so.1 exists on system
 if(VCPKG_TARGET_IS_LINUX)
     find_library(LIBCXX_LIB NAMES libc++.so.1 PATHS /usr/lib /usr/local/lib)
@@ -23,7 +40,7 @@ endif()
 
 # archive download managment
 set(VERSION "0.15.1")
-set(BASE_URL "https://github.com/isl-org/Open3D/releases/download/v${VERSION}")
+set(BASE_URL "https://github.com/isl-org/Open3D/releases/download/v${VERSION}/")
 
 if(VCPKG_TARGET_IS_WINDOWS)
     set(ARCHIVE_FILENAME_RELEASE "open3d-devel-windows-amd64-${VERSION}.zip")
@@ -37,7 +54,7 @@ elseif(VCPKG_TARGET_IS_LINUX)
             set(SHA512_RELEASE 0)
         else()
             set(ARCHIVE_FILENAME_RELEASE "open3d-devel-linux-x86_64-cxx11-abi-${VERSION}.tar.xz")
-            set(SHA512_RELEASE 1e0e4cc08fe4bf17a6edcb83added89b450df72fddc4e573eb2ba06e910efad341bc16de6b7274d93ce63dcaef5d25064fd4fe55141a727f0b862365026e6b68)
+            set(SHA512_RELEASE 0)
         endif()
     else()
         if(USE_CUDA)
@@ -91,10 +108,10 @@ else()
 endif()
 
 # Debug files (SAME AS RELEASE ON LINUX because Open3D provides no debug build there) 
-file(INSTALL "${src_debug}/include" DESTINATION "${CURRENT_PACKAGES_DIR}/debug")
 file(INSTALL "${src_debug}/lib" DESTINATION "${CURRENT_PACKAGES_DIR}/debug")
+file(INSTALL "${src_debug}/bin" DESTINATION "${CURRENT_PACKAGES_DIR}/debug")
 if(VCPKG_TARGET_IS_WINDOWS)
-    file(INSTALL "${src_debug}/bin" DESTINATION "${CURRENT_PACKAGES_DIR}/debug")
+    file(INSTALL "${src_debug}/bin" DESTINATION "${CURRENT_PACKAGES_DIR}")
     file(INSTALL "${src_debug}/CMake/" DESTINATION "${CURRENT_PACKAGES_DIR}/debug/share/${PORT}")
 else()
     file(INSTALL "${src_debug}/lib/cmake/Open3D" DESTINATION "${CURRENT_PACKAGES_DIR}/debug/share" RENAME "${PORT}")
