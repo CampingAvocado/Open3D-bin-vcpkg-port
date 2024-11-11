@@ -24,7 +24,9 @@ endif()
 
 # Check if libc++.so.1 exists on system
 if(VCPKG_TARGET_IS_LINUX)
-    find_library(LIBCXX_LIB NAMES libc++.so.1 PATHS /usr/lib /usr/local/lib)
+    set(CMAKE_FIND_ROOT_PATH /usr/lib /usr/local/lib)
+    set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+    find_library(LIBCXX_LIB NAMES libc++.so.1)
     if(NOT LIBCXX_LIB)
         message(FATAL_ERROR "
         *******************************************************
