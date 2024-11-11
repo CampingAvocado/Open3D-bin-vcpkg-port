@@ -4,6 +4,22 @@ if(NOT (VCPKG_TARGET_ARCHITECTURE STREQUAL "x64" OR VCPKG_TARGET_ARCHITECTURE ST
 endif()
 set(VCPKG_POLICY_ALLOW_EMPTY_FOLDERS enabled)
 
+# These featuresare ONLY RELEVANT FOR LINUX
+vcpkg_check_features(OUT_FEATURE_OPTIONS
+    cuda
+    cxx11-abi
+)
+if("cuda" IN_LIST OUT_FEATURE_OPTIONS)
+    set(USE_CUDA ON)
+else()
+    set(USE_CUDA OFF)
+endif()
+
+if("cxx11-abi" IN_LIST OUT_FEATURE_OPTIONS) # Relevant if you need old ABI, e.g. to work with PyTorch / TensorFlow libraries.
+    set(USE_CXX11_ABI ON)
+else()
+    set(USE_CXX11_ABI OFF)
+endif()
 
 # Check if libc++.so.1 exists on system
 if(VCPKG_TARGET_IS_LINUX)
@@ -22,10 +38,6 @@ if(VCPKG_TARGET_IS_LINUX)
     endif()
 endif()
 
-# custom bools ONLY RELEVANT FOR LINUX
-set(VCPKG_USE_CUDA OFF CACHE BOOL "Use CUDA")
-set(VCPKG_CXX11_ABI ON CACHE BOOL "Relevant if you need old ABI, e.g. to work with PyTorch / TensorFlow libraries.")
-
 # archive download managment
 set(VERSION "0.15.1")
 set(BASE_URL "https://github.com/isl-org/Open3D/releases/download/v${VERSION}")
@@ -36,8 +48,8 @@ if(VCPKG_TARGET_IS_WINDOWS)
     set(SHA512_RELEASE edbcaab47cc43b78b00373596f83be634df62a16e27ca464d13277dc6faa426821837585df226326408587a2558bf53cd2dfbf51698d02bb1f60b61f8b7cf854)
     set(SHA512_DEBUG 6ac22e20c5ef1285761b99eb8bf57ab20e074336c3a9d0010e79a1254f81b065c1bb2c9b1b4ee3f5ab37015469a2e61f4b036e1fb3d4d7147b88b0575858aee5)
 elseif(VCPKG_TARGET_IS_LINUX)
-    if(VCPKG_CXX11_ABI)
-        if(VCPKG_USE_CUDA)
+    if(USE_CXX11_ABI)
+        if(USE_CUDA)
             set(ARCHIVE_FILENAME_RELEASE "open3d-devel-linux-x86_64-cxx11-abi-cuda-${VERSION}.tar.xz")
             set(SHA512_RELEASE 0)
         else()
@@ -45,7 +57,7 @@ elseif(VCPKG_TARGET_IS_LINUX)
             set(SHA512_RELEASE 1e0e4cc08fe4bf17a6edcb83added89b450df72fddc4e573eb2ba06e910efad341bc16de6b7274d93ce63dcaef5d25064fd4fe55141a727f0b862365026e6b68)
         endif()
     else()
-        if(VCPKG_USE_CUDA)
+        if(USE_CUDA)
             set(ARCHIVE_FILENAME_RELEASE "open3d-devel-linux-x86_64-pre-cxx11-abi-cuda-${VERSION}.tar.xz")
             set(SHA512_RELEASE 0)
         else()

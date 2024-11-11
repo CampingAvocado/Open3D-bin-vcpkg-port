@@ -1,0 +1,9 @@
+Source: open3d
+Version: 0.15.1
+Default-Features: cxx11-abi
+
+Feature: cuda
+Description: Enable CUDA support
+
+Feature: cxx11-abi
+Description: Use C++11 ABI
