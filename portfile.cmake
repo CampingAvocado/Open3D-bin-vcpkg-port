@@ -97,19 +97,14 @@ else()
     file(INSTALL "${src_release}/lib/cmake/Open3D" DESTINATION "${CURRENT_PACKAGES_DIR}/share" RENAME "${PORT}")
 endif()
 
-# Debug files (SAME AS RELEASE ON LINUX because Open3D provides no debug build there) 
+# Debug files (SAME AS RELEASE ON LINUX because Open3D provides no debug build there)
 file(INSTALL "${src_debug}/lib" DESTINATION "${CURRENT_PACKAGES_DIR}/debug")
-file(INSTALL "${src_debug}/bin" DESTINATION "${CURRENT_PACKAGES_DIR}/debug")
 if(VCPKG_TARGET_IS_WINDOWS)
-    file(INSTALL "${src_debug}/bin" DESTINATION "${CURRENT_PACKAGES_DIR}")
-    file(INSTALL "${src_debug}/CMake/" DESTINATION "${CURRENT_PACKAGES_DIR}/debug/share/${PORT}")
-else()
-    file(INSTALL "${src_debug}/lib/cmake/Open3D" DESTINATION "${CURRENT_PACKAGES_DIR}/debug/share" RENAME "${PORT}")
+    file(INSTALL "${src_debug}/bin" DESTINATION "${CURRENT_PACKAGES_DIR}/debug")
 endif()
 
 # usage file
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
-file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/debug/share/${PORT}")
 
 # figure out cmake targets
 vcpkg_fixup_cmake_targets()
