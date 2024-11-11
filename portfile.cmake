@@ -4,23 +4,12 @@ if(NOT (VCPKG_TARGET_ARCHITECTURE STREQUAL "x64" OR VCPKG_TARGET_ARCHITECTURE ST
 endif()
 set(VCPKG_POLICY_ALLOW_EMPTY_FOLDERS enabled)
 
-# These featuresare ONLY RELEVANT FOR LINUX
+# These features are ONLY RELEVANT FOR LINUX
 vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
     FEATURES
-        cuda
-        cxx11-abi
+        cuda      USE_CUDA
+        cxx11-abi USE_CXX11_ABI # ON by default
 )
-if("cuda" IN_LIST FEATURE_OPTIONS)
-    set(USE_CUDA ON)
-else()
-    set(USE_CUDA OFF)
-endif()
-
-if("cxx11-abi" IN_LIST FEATURE_OPTIONS)
-    set(USE_CXX11_ABI ON)
-else()
-    set(USE_CXX11_ABI OFF)
-endif()
 
 # Check if libc++.so.1 exists on system
 if(VCPKG_TARGET_IS_LINUX)
@@ -41,7 +30,7 @@ endif()
 
 # archive download managment
 set(VERSION "0.15.1")
-set(BASE_URL "https://github.com/isl-org/Open3D/releases/download/v${VERSION}/")
+set(BASE_URL "https://github.com/isl-org/Open3D/releases/download/v${VERSION}")
 
 if(VCPKG_TARGET_IS_WINDOWS)
     set(ARCHIVE_FILENAME_RELEASE "open3d-devel-windows-amd64-${VERSION}.zip")
@@ -63,7 +52,7 @@ elseif(VCPKG_TARGET_IS_LINUX)
             set(SHA512_RELEASE 0)
         else()
             set(ARCHIVE_FILENAME_RELEASE "open3d-devel-linux-x86_64-pre-cxx11-abi-${VERSION}.tar.xz")
-            set(SHA512_RELEASE 0)
+            set(SHA512_RELEASE da792590cff40cc0cc32b1ea43bcde67a174bb10080ebc5a38841a811e915be8a35 0a63d044475e30b2b4bcdc4a9ec66e2bfa6e15e523059a61d3617be6cad84)
         endif()
     endif()
     set(ARCHIVE_FILENAME_DEBUG ${ARCHIVE_FILENAME_RELEASE}) # on linux, no debug-specific releases exist
