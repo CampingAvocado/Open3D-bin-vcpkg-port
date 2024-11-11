@@ -4,23 +4,6 @@ if(NOT (VCPKG_TARGET_ARCHITECTURE STREQUAL "x64" OR VCPKG_TARGET_ARCHITECTURE ST
 endif()
 set(VCPKG_POLICY_ALLOW_EMPTY_FOLDERS enabled)
 
-# These featuresare ONLY RELEVANT FOR LINUX
-vcpkg_check_features(OUT_FEATURE_OPTIONS
-    cuda
-    cxx11-abi
-)
-if("cuda" IN_LIST OUT_FEATURE_OPTIONS)
-    set(USE_CUDA ON)
-else()
-    set(USE_CUDA OFF)
-endif()
-
-if("cxx11-abi" IN_LIST OUT_FEATURE_OPTIONS) # Relevant if you need old ABI, e.g. to work with PyTorch / TensorFlow libraries.
-    set(USE_CXX11_ABI ON)
-else()
-    set(USE_CXX11_ABI OFF)
-endif()
-
 # Check if libc++.so.1 exists on system
 if(VCPKG_TARGET_IS_LINUX)
     find_library(LIBCXX_LIB NAMES libc++.so.1 PATHS /usr/lib /usr/local/lib)
