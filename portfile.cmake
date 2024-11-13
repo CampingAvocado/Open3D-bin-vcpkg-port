@@ -93,6 +93,10 @@ file(INSTALL "${src_release}/lib" DESTINATION "${CURRENT_PACKAGES_DIR}")
 if(VCPKG_TARGET_IS_WINDOWS)
     file(INSTALL "${src_release}/bin" DESTINATION "${CURRENT_PACKAGES_DIR}")
     file(INSTALL "${src_release}/CMake/" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
+else()
+    if(USE_CUDA)
+        file(INSTALL "${src_release}/share/resources" DESTINATION "${CURRENT_PACKAGES_DIR}")
+    endif()
 endif()
 
 # Debug files (SAME AS RELEASE ON LINUX because Open3D provides no debug build there) 
@@ -104,8 +108,6 @@ endif()
 
 # usage file
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
-
-# TODO: add resources folder for cuda linux archives
 
 # figure out cmake targets
 if(VCPKG_TARGET_IS_WINDOWS)
