@@ -16,4 +16,7 @@ Only tested in Manifest mode.
 ## Important Notes
 - This port is currently set up for version 0.15.1 of Open3D because I required this specific one.
 It may be possible to use a different version by adjusting `version` in `vcpkg.json` and `VERSION` in `portfile.cmake`
-- This project is also not well tested and likely still very unstable. Use at your own risk.
+- This project is also not well tested and likely still very unstable. Use at your own risk. As soon as there is a merged PR for a proper Open3D port on vcpkg (even one marked as unofficial), I plan on discarding this repository in favor of it.
+- Currently I've only loosely tested triplets:
+    - `x64-windows` with `msvc` and `Ninja`
+    - `x64-linux` with `gcc` and `make` with features [`cxx-abi`] (i.e. no cuda!)
