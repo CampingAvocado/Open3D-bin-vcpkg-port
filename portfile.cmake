@@ -109,11 +109,6 @@ endif()
 # usage file
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
 
-# TODO: figure out why -release.cmake is not deleted in debug folders on linux
-#       check if linking works on a minimal example:
-#           target path is not specified in vcpkg_fixup_cmake_targets even tho
-#           portname differs from find_package name...
-
 # figure out cmake targets
 if(VCPKG_TARGET_IS_WINDOWS)
     vcpkg_fixup_cmake_targets() # *.cmake already in right dir
