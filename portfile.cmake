@@ -1,5 +1,5 @@
 # vcpkg checks and configs
-if(NOT (VCPKG_TARGET_ARCHITECTURE STREQUAL "x64" OR VCPKG_TARGET_ARCHITECTURE STREQUAL "amd64"))
+if(NOT (VCPKG_TARGET_ARCHITECTURE STREQUAL "x64"))
     message(FATAL_ERROR "This port does not currently support architecture: ${VCPKG_TARGET_ARCHITECTURE}")
 endif()
 set(VCPKG_POLICY_ALLOW_EMPTY_FOLDERS enabled)
@@ -95,7 +95,9 @@ if(VCPKG_TARGET_IS_WINDOWS)
     file(INSTALL "${src_release}/CMake/" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
 else()
     if(USE_CUDA)
-        file(INSTALL "${src_release}/share/resources" DESTINATION "${CURRENT_PACKAGES_DIR}")
+        if(EXISTS "${src_release}/share/resources") # not present in v15 but in later ones
+            file(INSTALL "${src_release}/share/resources" DESTINATION "${CURRENT_PACKAGES_DIR}")
+        endif()
     endif()
 endif()
 
